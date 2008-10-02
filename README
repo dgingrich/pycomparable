@@ -1,11 +1,12 @@
 DISCLAIMER:
 
-This is basically for fun/learning purposes only.  If you really need all
-the comparisons, you're probably better off writing __cmp__.  I think
-Python3000 might automatically create __ne__ based on __eq__.  The one real
-world use might be to easily add all rich comparison methods to a subclass
-where the parent class implements a subset of the operator.  But how often
-does that happen?  Just use it for fun.
+Although this works (it really adds the rich comparison operators), it's for
+fun/learning purposes only.  If you really need all the comparisons, you're
+probably better off writing __cmp__.  I think Python3000 might automatically
+create __ne__ based on __eq__.  The one real world use might be to easily
+add all rich comparison methods to a subclass where the parent class
+implements a subset of the operator.  But how often does that happen?  Just
+use it for fun.
 
 
 Try to add rich comparison methods (__eq__, __ne__) to an existing class.
