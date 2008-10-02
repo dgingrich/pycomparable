@@ -1,15 +1,16 @@
 """
 DISCLAIMER:
 
-This is basically for fun/learning purposes only.  If you really need all
-the comparisons, you're probably better off writing __cmp__.  I think
-Python3000 might automatically create __ne__ based on __eq__.  The one real
-world use might be to easily add all rich comparison methods to a subclass
-where the parent class implements a subset of the operator.  But how often
-does that happen?  Just use it for fun.
+Although this works (it really adds the rich comparison operators), it's for
+fun/learning purposes only.  If you really need all the comparisons, you're
+probably better off writing __cmp__.  I think Python3000 might automatically
+create __ne__ based on __eq__.  The one real world use might be to easily
+add all rich comparison methods to a subclass where the parent class
+implements a subset of the operator.  But how often does that happen?  Just
+use it for fun.
 
 
-Try to add rich comparison methods (__eq__, __ne__) to an existing class.
+Try to add rich comparison methods (__eq__, __ne__, etc.) to an existing class.
 It exports three names:
 
 * comparable - class decorator
@@ -17,22 +18,23 @@ It exports three names:
 * ComparableMixin - Mixin to automatically call comparable
 
 comparable works as a class decorator.  It takes a class as an argument and
-returns a decorated class.  comparable attempts to add rich equality special
-methods if they are not defined.  If __eq__ is not defined, it will try to
-define it as being not != or not (< or >), etc.  It then sets != as the
-inversion of ==.  Finally it sets whatever inequalities are possible (e.g. <
-=== <= and not ==).
+returns a decorated class.  comparable attempts to add the rich comparison
+special methods if they are not defined.  If __eq__ is not defined, it will
+try to define it as being not != or not (< or >), etc.  It then sets != as
+the inversion of ==.  Finally it sets whatever inequalities are possible
+(e.g. < === <= and not ==).
 
 comparable will not overwrite existing methods.
 
-Currently comparable is lax: it will only add methods it can and will skip
-ones it can't.  So calling with a class that only has __eq__ will only add a
-__ne__ method.
+comparable won't add methods if there is not enough information.  For
+example, if only __eq__ and __ne__ are defined, it will not attempt to add
+any inequalities.  It also won't raise any errors, so be warned.
 
 ComparableMetaclass and ComparableMixin are additional ways to create a
-comparable class.  They delegate to comparable.
+comparable class.  Both are simply wrappers for the main comparable
+function.
 
-Inspired by the thread turned rant on comp.lang.python
+Inspired by this discussion turned rant on comp.lang.python
 (http://groups.google.com/group/comp.lang.python/browse_thread/thread/a5fa8ff0ffadd6ee/1aa3b5d25eae91d5)
 Loosely based on Ruby's comparable module
 (http://www.ruby-doc.org/core/classes/Comparable.html) though I believe the
