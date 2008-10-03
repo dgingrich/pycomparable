@@ -42,7 +42,7 @@ implementation is different.
 """
 
 
-def comparable(cls):
+def comparable(class_):
     """Adds rich comparison special methods (__ne__, __gt__, etc.) to a
     passed in class and returns the modified class.  See ComparableMetaclass
     or ComparableMixin for other ways of running.
@@ -54,9 +54,9 @@ def comparable(cls):
         for opk, opv in ops.items(): s = s.replace(opk, opv)
         return s
     mkfunc = lambda s: eval("lambda self, o: %s" % sub(s))
-    has = lambda s: hasattr(cls, '__%s__' % s)
+    has = lambda s: hasattr(class_, '__%s__' % s)
     set = lambda s, funcstr: \
-          setattr(cls, '__%s__' % s, mkfunc(funcstr)) if not has(s) \
+          setattr(class_, '__%s__' % s, mkfunc(funcstr)) if not has(s) \
           else None
 
     # Set ==
@@ -64,7 +64,7 @@ def comparable(cls):
         if has('ne'): set('eq', 'not ne')
         if has('gt') and has('lt'): set('eq', 'not (lt or gt)')
         if has('ge') and has('le'): set('eq', 'ge and le')
-    if not has('eq'): return cls      # Abort if can't get equals
+    if not has('eq'): return class_      # Abort if can't get equals
     # Set !=
     set('ne', 'not eq')
     # Set inequalities
@@ -86,19 +86,21 @@ def comparable(cls):
         set('le', 'not gt')
     else:
         pass    # Silently succeed
-    return cls
+    return class_
 
 
 class ComparableMetaclass(type):
     """Metaclass that will automatically run comparable on your class"""
-    def __new__(cls, *a, **ka):
-        return comparable(super(ComparableMetaclass, cls).__new__(cls, *a, **ka))
+    def __new__(class_, *a, **ka):
+        return comparable(super(ComparableMetaclass, class_) \
+                          .__new__(class_, *a, **ka))
 
 
 class ComparableMixin(object):
     """Mixin to run comparable.  Simply uses the metaclass internally."""
     # Almost the same code as ComparableMetaclass, but ComparableMixin =
     # ComparableMetaclass fails, maybe because of super(...) call?
-    def __new__(cls, *a, **ka):
-        return comparable(super(ComparableMixin, cls).__new__(cls, *a, **ka))
+    def __new__(class_, *a, **ka):
+        return comparable(super(ComparableMixin, class_) \
+                          .__new__(class_, *a, **ka))
 

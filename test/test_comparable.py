@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import sys; sys.path.append('..')
 import nose
-from comparable import *
+from pycomparable import *
 
 
-## Basic use (as class decorator)
+## Basic use (class decorator)
 
 def attach(cls, fn, val):
     """Attach rich comparison function to the class"""
@@ -122,6 +122,13 @@ def test_mixin_mi_metaclass():
     assert_has_rcomps(obj)
     assert obj.foo == 'bar'
 
+
+## Misc
+
+def test_docstring():
+    """Docstring should be large, should be imported from comparable"""
+    import pycomparable
+    assert len(pycomparable.__doc__) > 100      # 100 is arbitrary
 
 
 if __name__ == '__main__':
